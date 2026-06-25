@@ -11,12 +11,13 @@ URL_PLANILHA = "https://docs.google.com/spreadsheets/d/1Lbpv0sOIkUYgpIL4oMhgSpcb
 # --- DADOS DOS EXERCÍCIOS ---
 def carregar_treino():
     try:
-        # Lê a aba "Treino" da planilha
-        df = conn.read(spreadsheet=URL_PLANILHA, worksheet="Treino")
-        return df.dropna(how="all") # Remove linhas totalmente vazias
-    except Exception:
+        # Adicionamos ttl=0 para forçar o Streamlit a buscar os dados em tempo real no Google
+        df = conn.read(spreadsheet=URL_PLANILHA, worksheet="Treino", ttl=0)
+        return df.dropna(how="all") 
+    except Exception as e:
+        # Se der erro, agora ele vai mostrar na tela vermelha exatamente o que deu errado!
+        st.error(f"Erro ao tentar ler a aba Treino: {e}")
         return pd.DataFrame(columns=["Exercício", "Séries", "Repetições", "Link do Vídeo"])
-
 def salvar_treino(df):
     conn.update(spreadsheet=URL_PLANILHA, worksheet="Treino", data=df)
 
