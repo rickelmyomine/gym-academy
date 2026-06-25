@@ -1,33 +1,43 @@
 import pandas as pd
-import os
+import streamlit as st
+from streamlit_gsheets import GSheetsConnection
 
-ARQUIVO_CSV = "meu_treino.csv"
-ARQUIVO_CRONOGRAMA = "meu_cronograma.csv"
+# Inicia a conexão com o Google Sheets usando as credenciais da nuvem
+conn = st.connection("gsheets", type=GSheetsConnection)
+
+# Substitua por a sua URL real da planilha do Google!
+URL_PLANILHA = "https://docs.google.com/spreadsheets/d/1Lbpv0sOIkUYgpIL4oMhgSpcbLzXRv9Mdra3SQPfQHsY/edit?usp=sharing"
 
 # --- DADOS DOS EXERCÍCIOS ---
 def carregar_treino():
-    if os.path.exists(ARQUIVO_CSV):
-        return pd.read_csv(ARQUIVO_CSV)
-    return pd.DataFrame(columns=["Exercício", "Séries", "Repetições", "Link do Vídeo"])
+    try:
+        # Lê a aba "Treino" da planilha
+        df = conn.read(spreadsheet=URL_PLANILHA, worksheet="Treino")
+        return df.dropna(how="all") # Remove linhas totalmente vazias
+    except Exception:
+        return pd.DataFrame(columns=["Exercício", "Séries", "Repetições", "Link do Vídeo"])
 
 def salvar_treino(df):
-    df.to_csv(ARQUIVO_CSV, index=False)
+    conn.update(spreadsheet=URL_PLANILHA, worksheet="Treino", data=df)
 
 # --- DADOS DO CRONOGRAMA ---
 def carregar_cronograma():
-    if os.path.exists(ARQUIVO_CRONOGRAMA):
-        return pd.read_csv(ARQUIVO_CRONOGRAMA)
-    return pd.DataFrame(columns=["Dia da Semana", "Exercícios"])
+    try:
+        df = conn.read(spreadsheet=URL_PLANILHA, worksheet="Cronograma")
+        return df.dropna(how="all")
+    except Exception:
+        return pd.DataFrame(columns=["Dia da Semana", "Exercícios"])
 
 def salvar_cronograma(df):
-    df.to_csv(ARQUIVO_CRONOGRAMA, index=False)
-    # --- DADOS DO HISTÓRICO ---
-ARQUIVO_HISTORICO = "meu_historico.csv"
+    conn.update(spreadsheet=URL_PLANILHA, worksheet="Cronograma", data=df)
 
+# --- DADOS DO HISTÓRICO ---
 def carregar_historico():
-    if os.path.exists(ARQUIVO_HISTORICO):
-        return pd.read_csv(ARQUIVO_HISTORICO)
-    return pd.DataFrame(columns=["Data", "Treino Concluído"])
+    try:
+        df = conn.read(spreadsheet=URL_PLANILHA, worksheet="Historico")
+        return df.dropna(how="all")
+    except Exception:
+        return pd.DataFrame(columns=["Data", "Treino Concluído"])
 
 def salvar_historico(df):
-    df.to_csv(ARQUIVO_HISTORICO, index=False)
+    conn.update(spreadsheet=URL_PLANILHA, worksheet="Historico", data=df)
