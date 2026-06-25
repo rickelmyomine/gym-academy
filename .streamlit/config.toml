@@ -1,15 +1,15 @@
 [theme]
 # A cor principal (botões, barra de progresso, foco nos inputs)
-primaryColor = "#00FFAA"
+primaryColor = "#316a43"
 
 # Cor do fundo principal da página
-backgroundColor = "#121212"
+backgroundColor = "#c9c9c9f6"
 
 # Cor do fundo secundário (a barra lateral e as caixas de seleção)
-secondaryBackgroundColor = "#1E1E1E"
+secondaryBackgroundColor = "#00ffaa3a"
 
-# Cor do texto
-textColor = "#FFFFFF"
+# Cor do texto (escuro para dar contraste com o fundo branco)
+textColor = "#262730"
 
 # Fonte do aplicativo
 font = "sans serif"
