@@ -1,0 +1,6 @@
+# Ignorar arquivos de chaves e senhas
+.streamlit/secrets.toml
+
+
+# Ignorar pastas virtuais do Python (boa prática)
+__pycache__/
